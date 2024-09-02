@@ -128,14 +128,19 @@ export default function App() {
                       {...form.getInputProps("confirmEmail")}
                     />
                   </Container>
-                  <Button disabled={isLoading} variant="outline" type="submit">
+                  <Button
+                    style={{ background: "#000000", color: "#F9F9F9" }}
+                    disabled={isLoading}
+                    variant="light"
+                    type="submit"
+                  >
                     {isLoading ? (
-                      <>
+                      <ShortContainer>
                         <Loader size={14} />
                         <Text>Please wait...</Text>
-                      </>
+                      </ShortContainer>
                     ) : (
-                      <Text>Send</Text>
+                      <Text fw={500}>Send</Text>
                     )}
                   </Button>
                 </Form>
@@ -204,4 +209,9 @@ const Container = styled.div<ContainerProps>`
   flex-direction: column;
   gap: 1rem;
   margin-bottom: ${(props) => props.marginBottom};
+`;
+
+const ShortContainer = styled.div`
+  display: flex;
+  gap: 1rem;
 `;

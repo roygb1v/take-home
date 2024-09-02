@@ -1,11 +1,21 @@
 import { Text } from "@mantine/core";
 import classes from "./Footer.module.css";
+import { IconHeartFilled } from "@tabler/icons-react";
+import styled from "styled-components";
 
 export function Footer() {
   return (
     <div className={classes.footer}>
-      <Text>Made with Love from Melbourne</Text>
+      <TextContainer>
+        Made with <IconHeartFilled /> from Melbourne
+      </TextContainer>
       <Text>2024 Broccoli and Co. All rights reserved.</Text>
     </div>
   );
 }
+
+const TextContainer = styled(Text)`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
