@@ -67,7 +67,7 @@ export default function App() {
     const payload = { email, name };
     setIsLoading(true);
     try {
-      const { data, status } = await axios.post(
+      const { status } = await axios.post(
         "https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth",
         payload,
         {
@@ -195,7 +195,11 @@ const Form = styled.form`
   gap: 1rem;
 `;
 
-const Container = styled.div`
+interface ContainerProps {
+  marginBottom?: string;
+}
+
+const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
