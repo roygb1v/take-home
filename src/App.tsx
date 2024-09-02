@@ -94,7 +94,9 @@ export default function App() {
             A better way <br />
             to enjoy every day.
           </Title>
-          <Text size="xl">Be the first to know when we launch.</Text>
+          <Text size="xl" c="dimmed">
+            Be the first to know when we launch.
+          </Text>
           <Modal
             size="lg"
             opened={opened}

@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <div className={classes.footer}>
       <TextContainer>
-        Made with <IconHeartFilled /> from Melbourne
+        Made with <IconHeartFilled style={{ color: "red" }} /> from Melbourne
       </TextContainer>
       <Text>2024 Broccoli and Co. All rights reserved.</Text>
     </div>
