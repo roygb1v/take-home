@@ -149,9 +149,9 @@ export default function App() {
                     )}
                   </Button>
                   {error && (
-                    <CenteredText style={{ color: "red" }}>
+                    <Text style={{ textAlign: "center", color: "red" }}>
                       {error}
-                    </CenteredText>
+                    </Text>
                   )}
                 </Form>
               )}
