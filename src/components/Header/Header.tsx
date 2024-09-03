@@ -1,7 +1,7 @@
 import { UnstyledButton, Text } from "@mantine/core";
 import classes from "./Header.module.css";
 
-export function Header() {
+export function NavigationHeader() {
   return (
     <header className={classes.header}>
       <UnstyledButton>

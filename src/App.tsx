@@ -4,23 +4,47 @@ import {
   MantineProvider,
   Title,
   Text,
+  TextProps,
   TextInput,
   Modal,
   Button,
   Loader,
+  Space,
+  Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { theme } from "./theme";
 import styled from "styled-components";
-import { Header } from "./components/Header/Header";
+import { NavigationHeader } from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
 
-const axios = require("axios").default;
+import axios, { AxiosRequestConfig } from "axios";
+
+const config: AxiosRequestConfig = {
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
 
 export default function App() {
+  const [opened, { open, close }] = useDisclosure(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
+
+  const validateEmail = (value: string) => {
+    const { email, confirmEmail } = form.getValues();
+
+    if (!value) {
+      return "Email cannot be empty.";
+    }
+
+    if (email !== confirmEmail) {
+      return "Email provided are not the same.";
+    }
+    return /^\S+@\S+$/.test(value) ? null : "Invalid email.";
+  };
 
   const form = useForm({
     mode: "uncontrolled",
@@ -31,72 +55,54 @@ export default function App() {
     },
     validate: {
       name: (value) =>
-        value && value.length > 3
+        value && value.length >= 3
           ? null
-          : "Full name should be more than 3 characters.",
-      email: (value) => {
-        const { email, confirmEmail } = form.getValues();
-
-        if (!value) {
-          return "Email cannot be empty.";
-        }
-
-        if (email !== confirmEmail) {
-          return "Email provided are not the same.";
-        }
-        return /^\S+@\S+$/.test(value) ? null : "Invalid email.";
-      },
-      confirmEmail: (value) => {
-        const { email, confirmEmail } = form.getValues();
-
-        if (!value) {
-          return "Email cannot be empty.";
-        }
-
-        if (email !== confirmEmail) {
-          return "Email provided are not the same.";
-        }
-        return /^\S+@\S+$/.test(value) ? null : "Invalid email.";
-      },
+          : "Full name should be at least 3 characters.",
+      email: validateEmail,
+      confirmEmail: validateEmail,
     },
   });
 
-  const [opened, { open, close }] = useDisclosure(false);
   const handleSubmit = async (values: typeof form.values) => {
     const { email, name } = values;
     const payload = { email, name };
     setIsLoading(true);
+    setError(null);
     try {
       const { status } = await axios.post(
         "https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth",
         payload,
-        {
-          "Content-Type": "application/json",
-        }
+        config
       );
 
       if (status === 200) {
         form.reset();
         setIsRegistered(true);
+        setError(null);
       }
-    } catch (e) {
-      console.log("err", e);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data.errorMessage);
+      }
     }
     setIsLoading(false);
   };
 
   return (
     <MantineProvider theme={theme}>
-      <FlexContainer>
-        <Header />
+      <Wrapper>
+        <NavigationHeader />
         <Body>
-          <Title order={1} size="h1" style={{ textAlign: "center" }}>
-            A better way <br />
-            to enjoy every day.
-          </Title>
-          <Text size="xl" c="dimmed">
-            Be the first to know when we launch.
-          </Text>
+          <Container direction="column" alignItems="center" gap="1rem">
+            <CenteredTitle order={1} size="h1">
+              A better way <br />
+              to enjoy every day.
+            </CenteredTitle>
+            <Text size="xl" c="dimmed">
+              Be the first to know when we launch.
+            </Text>
+          </Container>
+
           <Modal
             size="lg"
             opened={opened}
@@ -105,12 +111,14 @@ export default function App() {
               close();
             }}
             centered
-            title={<Text>Request an invite</Text>}
           >
             <ModalContent>
               {!isRegistered && (
                 <Form onSubmit={form.onSubmit(handleSubmit)}>
-                  <Container marginBottom="2rem">
+                  <Container direction="column" gap="1rem" marginBottom="2rem">
+                    <CenteredTitle order={2}>Request an invite</CenteredTitle>
+                    <SmallDivider size="md" />
+                    <Space h="lg" />
                     <TextInput
                       label="Full name"
                       placeholder="Your name here..."
@@ -130,51 +138,48 @@ export default function App() {
                       {...form.getInputProps("confirmEmail")}
                     />
                   </Container>
-                  <Button
-                    style={{ background: "#000000", color: "#F9F9F9" }}
-                    disabled={isLoading}
-                    variant="light"
-                    type="submit"
-                  >
+                  <Button disabled={isLoading} variant="filled" type="submit">
                     {isLoading ? (
-                      <ShortContainer>
+                      <Container alignItems="center" gap="0.5rem">
                         <Loader size={14} />
                         <Text>Please wait...</Text>
-                      </ShortContainer>
+                      </Container>
                     ) : (
-                      <Text fw={500}>Send</Text>
+                      <Text fw={700}>Send</Text>
                     )}
                   </Button>
+                  {error && (
+                    <CenteredText style={{ color: "red" }}>
+                      {error}
+                    </CenteredText>
+                  )}
                 </Form>
               )}
               {isRegistered && (
-                <Container>
-                  <Text>All done!</Text>
-                  <Text>Thanks</Text>
-                  <Text>
-                    You will be notified of any changes when we launch. Keep in
-                    touch!
-                  </Text>
+                <Container direction="column" gap="2rem" alignItems="center">
+                  <Container direction="column" gap="1rem" alignItems="center">
+                    <Title order={2}>All done!</Title>
+                    <SmallDivider size="md" />
+                  </Container>
+                  <CenteredText>
+                    You will be one of the first to experience Broccoli & Co.
+                    when we launch.
+                  </CenteredText>
                 </Container>
               )}
             </ModalContent>
           </Modal>
-          <Button
-            style={{ background: "#000000" }}
-            size="lg"
-            variant="primary"
-            onClick={open}
-          >
+          <Button size="lg" variant="filled" onClick={open}>
             Request an invite
           </Button>
         </Body>
         <Footer />
-      </FlexContainer>
+      </Wrapper>
     </MantineProvider>
   );
 }
 
-const FlexContainer = styled.div`
+const Wrapper = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -203,17 +208,37 @@ const Form = styled.form`
 `;
 
 interface ContainerProps {
+  direction?: string;
   marginBottom?: string;
+  alignItems?: string;
+  justifyContent?: string;
+  gap?: string;
 }
 
 const Container = styled.div<ContainerProps>`
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  flex-direction: ${(props) => (props.direction ? props.direction : "row")};
+  align-items: ${(props) => props.alignItems};
+  justify-content: ${(props) => props.justifyContent};
+  gap: ${(props) => props.gap};
   margin-bottom: ${(props) => props.marginBottom};
 `;
 
-const ShortContainer = styled.div`
-  display: flex;
-  gap: 1rem;
+const CenteredTitle = styled(Title)`
+  text-align: center;
+`;
+
+interface CenteredTextProps extends TextProps {
+  width?: string;
+}
+
+const CenteredText = styled(Text)<CenteredTextProps>`
+  text-align: center;
+  width: ${(props) => props.width};
+`;
+
+const SmallDivider = styled(Divider)`
+  width: 4rem;
+  margin: auto;
+  border-radius: 1rem;
 `;

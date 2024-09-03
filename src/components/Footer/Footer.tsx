@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <div className={classes.footer}>
       <TextContainer>
-        Made with <IconHeartFilled style={{ color: "red" }} /> from Melbourne
+        Made with <IconHeartFilledRed /> from Melbourne
       </TextContainer>
       <Text>2024 Broccoli and Co. All rights reserved.</Text>
     </div>
@@ -18,4 +18,8 @@ const TextContainer = styled(Text)`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+`;
+
+const IconHeartFilledRed = styled(IconHeartFilled)`
+  color: red;
 `;
