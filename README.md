@@ -1,5 +1,13 @@
-# Mantine Vite template
+# Broccoli & Co. Launch Web App
 
-Get started with the template by clicking `Use this template` button on the top of the page.
+## Getting Started
 
-[Documentation](https://mantine.dev/guides/vite/)
+1. Run `yarn install`
+
+2. Run `yarn run dev`
+
+### To build a production build, run the following command:
+
+Run `yarn run build`
+
+### To run unit tests
