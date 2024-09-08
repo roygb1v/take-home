@@ -6,21 +6,38 @@ This web app is the launch page for Broccoli & Co. It allows users to get notifi
 
 To get started with this project, follow these steps:
 
-1. Install dependencies:
+Set Node version to >= 20.0.0 using nvm:
 
-   ```
+```
+nvm use v20.0.0
 
-   yarn install
+```
 
-   ```
+Install dependencies:
 
-2. Start the development server:
+```
 
-   ```
+yarn install
 
-   yarn run dev
+```
 
-   ```
+Start the development server:
+
+```
+
+yarn run dev
+
+```
+
+## Linting
+
+To check for linting errors, run:
+
+```
+
+yarn lint
+
+```
 
 ## Production Build
 

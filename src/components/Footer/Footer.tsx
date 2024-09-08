@@ -3,7 +3,7 @@ import classes from "./Footer.module.css";
 import { IconHeartFilled } from "@tabler/icons-react";
 import styled from "styled-components";
 
-export function Footer() {
+export default function Footer() {
   return (
     <div className={classes.footer}>
       <TextContainer>
