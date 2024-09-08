@@ -9,7 +9,7 @@ interface ContentProps {
 
 export default function Content({
   order = 1,
-  title = "A better way <br /> to enjoy every day.",
+  title = "A better way to enjoy every day.",
   description = "Be the first to know when we launch.",
 }: ContentProps) {
   return (

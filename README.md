@@ -56,7 +56,7 @@ To run the test suite, use the following command:
 
 ```
 
-yarn run test
+yarn vitest
 
 ```
 
