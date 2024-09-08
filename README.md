@@ -9,6 +9,7 @@ To get started with this project, follow these steps:
 Set Node version to >= 20.0.0 using nvm:
 
 ```
+
 nvm use v20.0.0
 
 ```
