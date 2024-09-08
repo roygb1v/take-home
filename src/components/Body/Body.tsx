@@ -6,24 +6,8 @@ import styled from "styled-components";
 import Content from "../Content/Content";
 import GenericButton from "../GenericButton/GenericButton";
 import SuccessModal from "../SuccessModal/SuccessModal";
-
-import axios, { AxiosRequestConfig } from "axios";
-
-const config: AxiosRequestConfig = {
-  headers: {
-    "Content-Type": "application/json",
-  },
-};
-
-const API =
-  "https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth";
-
-// class AxiosClient {
-//   constructor(baseURL, config) {
-//     this.baseURL = baseURL;
-//     this.config = config;
-//   }
-// }
+import axios from "axios";
+import * as EmailValidator from "email-validator";
 
 export default function Body() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -41,13 +25,25 @@ export default function Body() {
     if (email !== confirmEmail) {
       return "Email provided are not the same.";
     }
-    return /^\S+@\S+$/.test(value) ? null : "Invalid email.";
+
+    const isEmailValid = EmailValidator.validate(email);
+    if (!isEmailValid) {
+      return "Email is not valid.";
+    }
+
+    return null;
   };
 
   const validateName = (value: string) => {
-    return value && value.length >= 3
-      ? null
-      : "Full name should be at least 3 characters.";
+    if (value.length < 3) {
+      return "Full name should be at least 3 characters.";
+    }
+
+    if (value.length > 140) {
+      return "Full name is too long. Please limit to 140 characters.";
+    }
+
+    return null;
   };
 
   const form = useForm({
@@ -70,7 +66,10 @@ export default function Body() {
     setIsLoading(true);
     setError(null);
     try {
-      const { status } = await axios.post(API, payload, config);
+      const { status } = await axios.post(
+        "https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth",
+        payload
+      );
 
       if (status === 200) {
         form.reset();
