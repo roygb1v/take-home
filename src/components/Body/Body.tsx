@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import {
   Title,
   Text,
@@ -10,21 +10,22 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
+import { formReducer, initialState } from "../../reducers/formReducer";
 import styled from "styled-components";
 import Content from "../Content/Content";
 import GenericButton from "../GenericButton/GenericButton";
 import SuccessModal from "../SuccessModal/SuccessModal";
-import axios from "axios";
 import * as EmailValidator from "email-validator";
+import axios from "axios";
+import { URL, defaultConfig } from "../../api/client.ts";
 
 const MIN_NAME_CHARS = 3;
 const MAX_NAME_CHARS = 140;
 
 export default function Body() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [state, dispatch] = useReducer(formReducer, initialState);
+  const { isRegistered, isLoading, error } = state;
 
   const validateEmail = (value: string) => {
     const { email, confirmEmail } = form.getValues();
@@ -34,7 +35,7 @@ export default function Body() {
     }
 
     if (email !== confirmEmail) {
-      return "Email provided are not the same.";
+      return "Emails provided are not the same.";
     }
 
     const isEmailValid = EmailValidator.validate(email);
@@ -47,7 +48,7 @@ export default function Body() {
 
   const validateName = (value: string) => {
     if (value.length < MIN_NAME_CHARS) {
-      return "Full name should be at least 3 characters.";
+      return "Full name must be at least 3 characters.";
     }
 
     if (value.length > MAX_NAME_CHARS) {
@@ -74,25 +75,25 @@ export default function Body() {
   const handleSubmit = async (values: typeof form.values) => {
     const { email, name } = values;
     const payload = { email, name };
-    setIsLoading(true);
-    setError(null);
+
+    dispatch({ type: "SUBMIT" });
     try {
-      const { status } = await axios.post(
-        "https://l94wc2001h.execute-api.ap-southeast-2.amazonaws.com/prod/fake-auth",
-        payload
-      );
+      console.log("try");
+      const { status } = await axios.post(URL, payload, defaultConfig);
+      console.log("status", status);
 
       if (status === 200) {
         form.reset();
-        setIsRegistered(true);
-        setError(null);
+
+        dispatch({ type: "SUCCESS" });
       }
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.errorMessage);
+        dispatch({ type: "FAILURE", payload: err.response.data.errorMessage });
+      } else {
+        dispatch({ type: "FAILURE", payload: "An unexpected error occurred" });
       }
     }
-    setIsLoading(false);
   };
   return (
     <Wrapper>
@@ -103,7 +104,7 @@ export default function Body() {
         centered
         opened={opened}
         onClose={() => {
-          setIsRegistered(false);
+          dispatch({ type: "RESET" });
           close();
         }}
       >
@@ -124,12 +125,14 @@ export default function Body() {
                   label="Email"
                   placeholder="Your email here..."
                   key={form.key("email")}
+                  data-testid="email-error"
                   {...form.getInputProps("email")}
                 />
                 <TextInput
                   label="Confirm email"
                   placeholder="Your email here..."
                   key={form.key("confirmEmail")}
+                  data-testid="confirm-email-error"
                   {...form.getInputProps("confirmEmail")}
                 />
               </Container>
@@ -138,7 +141,11 @@ export default function Body() {
                 loadingText="Please wait..."
                 actionText="Send"
               />
-              {error && <CenteredText $color="red">{error}</CenteredText>}
+              {error && (
+                <CenteredText data-testid="error-message" $color="red">
+                  {error}
+                </CenteredText>
+              )}
             </Form>
           )}
           {isRegistered && <SuccessModal />}
