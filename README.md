@@ -60,6 +60,16 @@ yarn vitest
 
 ```
 
+## Code Coverage
+
+To run code coverage statistics, run:
+
+```
+
+yarn run test:coverage
+
+```
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
