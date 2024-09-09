@@ -1,5 +1,5 @@
 import { render, screen } from "../../../test-utils";
-
+import { describe, it, expect, vi } from "vitest";
 import Footer from "./Footer";
 
 // Mock the @tabler/icons-react package

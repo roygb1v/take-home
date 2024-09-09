@@ -127,11 +127,7 @@ export default function Body() {
                 loadingText="Please wait..."
                 actionText="Send"
               />
-              {error && (
-                <Text style={{ textAlign: "center", color: "red" }}>
-                  {error}
-                </Text>
-              )}
+              {error && <CenteredText $color="red">{error}</CenteredText>}
             </Form>
           )}
           {isRegistered && <SuccessModal />}
@@ -187,6 +183,15 @@ const ModalContent = styled.div`
 
 const CenteredTitle = styled(Title)`
   text-align: center;
+`;
+
+interface CenteredTextProps {
+  $color: string;
+}
+
+const CenteredText = styled(Text)<CenteredTextProps>`
+  text-align: center;
+  color: ${(props) => props.$color};
 `;
 
 const SmallDivider = styled(Divider)`

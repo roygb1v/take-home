@@ -1,5 +1,5 @@
 import { render, screen } from "../../../test-utils";
-
+import { describe, it, expect } from "vitest";
 import SuccessModal from "./SuccessModal";
 
 describe("SuccessModal component", () => {

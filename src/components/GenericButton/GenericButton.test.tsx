@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from "../../../test-utils";
+import { render, screen } from "../../../test-utils";
+import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import GenericButton from "./GenericButton";
 

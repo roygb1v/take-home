@@ -1,26 +1,24 @@
 import "@mantine/core/styles.css";
-import { MantineProvider } from "@mantine/core";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { MantineProvider, Text } from "@mantine/core";
 import { theme } from "./theme";
-import styled from "styled-components";
-import NavigationHeader from "./components/Header/Header";
-import Body from "./components/Body/Body";
-import Footer from "./components/Footer/Footer";
+import WelcomePage from "./pages/WelcomePage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    loader: () => ({ message: "Loading..." }),
+    Component: () => <WelcomePage />,
+  },
+]);
 
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <Wrapper>
-        <NavigationHeader />
-        <Body />
-        <Footer />
-      </Wrapper>
+      <RouterProvider
+        router={router}
+        fallbackElement={<Text>Loading...</Text>}
+      />
     </MantineProvider>
   );
 }
-
-const Wrapper = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
