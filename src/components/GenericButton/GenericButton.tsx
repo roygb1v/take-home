@@ -4,7 +4,7 @@ import { Button, Text, Loader } from "@mantine/core";
 interface GenericButtonProps {
   size?: string;
   variant?: string;
-  type?: string;
+  type?: "button" | "submit" | "reset" | undefined;
   isLoading?: boolean;
   loadingText?: string;
   actionText?: string;

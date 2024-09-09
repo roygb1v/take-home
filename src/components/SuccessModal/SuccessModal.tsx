@@ -2,20 +2,18 @@ import styled from "styled-components";
 import { Title, Text, TextProps, Divider } from "@mantine/core";
 
 interface SuccessModalProps {
-  order?: number;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
 export default function SuccessModal({
-  order = 2,
   title = "All done!",
   description = "You will be one of the first to experience Broccoli & Co. when we launch.",
 }: SuccessModalProps) {
   return (
     <Container direction="column" $gap="2rem" $alignItems="center">
       <Container direction="column" $gap="1rem" $alignItems="center">
-        <Title order={order}>{title}</Title>
+        <Title order={2}>{title}</Title>
         <SmallDivider size="md" />
       </Container>
       <CenteredText>{description}</CenteredText>

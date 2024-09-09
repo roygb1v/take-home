@@ -1,5 +1,13 @@
-import { useState } from "react";
-import { Title, Text, TextInput, Modal, Space, Divider } from "@mantine/core";
+import React, { useState } from "react";
+import {
+  Title,
+  Text,
+  TextProps,
+  TextInput,
+  Modal,
+  Space,
+  Divider,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import styled from "styled-components";
@@ -8,6 +16,9 @@ import GenericButton from "../GenericButton/GenericButton";
 import SuccessModal from "../SuccessModal/SuccessModal";
 import axios from "axios";
 import * as EmailValidator from "email-validator";
+
+const MIN_NAME_CHARS = 3;
+const MAX_NAME_CHARS = 140;
 
 export default function Body() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -35,11 +46,11 @@ export default function Body() {
   };
 
   const validateName = (value: string) => {
-    if (value.length < 3) {
+    if (value.length < MIN_NAME_CHARS) {
       return "Full name should be at least 3 characters.";
     }
 
-    if (value.length > 140) {
+    if (value.length > MAX_NAME_CHARS) {
       return "Full name is too long. Please limit to 140 characters.";
     }
 
@@ -185,8 +196,9 @@ const CenteredTitle = styled(Title)`
   text-align: center;
 `;
 
-interface CenteredTextProps {
-  $color: string;
+interface CenteredTextProps extends TextProps {
+  children: React.ReactNode;
+  $color?: string;
 }
 
 const CenteredText = styled(Text)<CenteredTextProps>`

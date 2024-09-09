@@ -2,19 +2,17 @@ import styled from "styled-components";
 import { Title, Text } from "@mantine/core";
 
 interface ContentProps {
-  order?: number;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
 export default function Content({
-  order = 1,
   title = "A better way to enjoy every day.",
   description = "Be the first to know when we launch.",
 }: ContentProps) {
   return (
     <Container direction="column" $alignItems="center" $gap="1rem">
-      <CenteredTitle order={order} size="h1">
+      <CenteredTitle order={1} size="h1">
         {title}
       </CenteredTitle>
       <Text size="xl" c="dimmed">

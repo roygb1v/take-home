@@ -1,5 +1,6 @@
 import { render, screen } from "../../../test-utils";
 import { describe, it, expect } from "vitest";
+import "@testing-library/jest-dom";
 import SuccessModal from "./SuccessModal";
 
 describe("SuccessModal component", () => {
