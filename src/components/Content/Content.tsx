@@ -1,13 +1,19 @@
+import React from "react";
 import styled from "styled-components";
 import { Title, Text } from "@mantine/core";
 
 interface ContentProps {
-  title?: string;
+  title?: React.ReactNode;
   description?: string;
 }
 
 export default function Content({
-  title = "A better way to enjoy every day.",
+  title = (
+    <>
+      A better way <br />
+      to enjoy every day.
+    </>
+  ),
   description = "Be the first to know when we launch.",
 }: ContentProps) {
   return (
