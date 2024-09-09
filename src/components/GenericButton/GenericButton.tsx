@@ -7,7 +7,7 @@ interface GenericButtonProps {
   type?: string;
   isLoading?: boolean;
   loadingText?: string;
-  actionText: string;
+  actionText?: string;
   onClick?: () => void;
 }
 
@@ -15,9 +15,9 @@ export default function GenericButton({
   size = "md",
   variant = "filled",
   type = "submit",
-  isLoading,
-  loadingText,
-  actionText,
+  isLoading = false,
+  loadingText = "Please wait",
+  actionText = "Send",
   onClick,
 }: GenericButtonProps) {
   return (
